@@ -15,7 +15,11 @@ public class PaymentDto {
     private Long id;
     private Long studentId;
     private String studentName;
+    private Long courseId; // NEW
+    private String courseName; // NEW
     private BigDecimal amount;
+    private Integer lessonsCount; // NEW
+    private BigDecimal pricePerLesson; // NEW
     private LocalDateTime paymentDate;
     private String description;
     private PaymentStatus status;

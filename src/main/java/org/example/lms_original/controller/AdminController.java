@@ -2,6 +2,10 @@ package org.example.lms_original.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import org.example.lms_original.dto.attendance.AttendanceDto;
+import org.example.lms_original.dto.balance.StudentBalanceDto;
+import org.example.lms_original.dto.lesson.LessonDto;
 import org.example.lms_original.dto.teacher.*;
 import org.example.lms_original.dto.student.*;
 import org.example.lms_original.dto.course.*;
@@ -33,6 +37,9 @@ public class AdminController {
     private final GroupService groupService;
     private final PaymentService paymentService;
     private final FinancialService financialService;
+    private final StudentBalanceService balanceService;
+    private final AttendanceService attendanceService;
+    private final LessonService lessonService;
 
     // ================== USER MANAGEMENT ==================
 
@@ -124,6 +131,37 @@ public class AdminController {
         studentService.deleteStudent(id);
         return ResponseEntity.noContent().build();
     }
+
+    // ================== LESSON MANAGEMENT ==================
+
+    @Operation(summary = "Get lessons by teacher", description = "Get all lessons for a specific teacher")
+    @GetMapping("/lessons/teacher/{teacherId}")
+    public ResponseEntity<List<LessonDto>> getLessonsByTeacher(@PathVariable Long teacherId) {
+        return ResponseEntity.ok(lessonService.getLessonsByTeacher(teacherId));
+    }
+
+//    @Operation(summary = "Get all lessons", description = "Get all lessons in the system")
+//    @GetMapping("/lessons")
+//    public ResponseEntity<List<LessonDto>> getAllLessons(Authentication auth) {
+//        // This would require a method to get all lessons - you can implement this in LessonService
+//        return ResponseEntity.ok(lessonService.getAllLessons());
+//    }
+
+// ================== ATTENDANCE MANAGEMENT ==================
+
+    @Operation(summary = "Get attendance by student", description = "Get all attendance records for a student")
+    @GetMapping("/attendance/student/{studentId}")
+    public ResponseEntity<List<AttendanceDto>> getAttendanceByStudent(@PathVariable Long studentId) {
+        return ResponseEntity.ok(attendanceService.getAttendanceByStudent(studentId));
+    }
+
+// ================== BALANCE MANAGEMENT ==================
+
+//    @Operation(summary = "Get all balances with remaining lessons", description = "Get all student balances that have remaining lessons")
+//    @GetMapping("/balances/active")
+//    public ResponseEntity<List<StudentBalanceDto>> getActiveBalances() {
+//        return ResponseEntity.ok(balanceService.getAllActiveBalances());
+//    }
 
     // ================== COURSE MANAGEMENT ==================
 

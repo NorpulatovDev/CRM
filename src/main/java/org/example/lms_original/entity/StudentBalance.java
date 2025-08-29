@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @Entity
-@Table(name = "payments")
-public class Payment {
+@Table(name = "student_balances")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class StudentBalance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,28 +22,26 @@ public class Payment {
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    // NEW: Link payment to specific course
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
     @Column(nullable = false)
-    private BigDecimal amount;
-
-    // NEW: Number of lessons this payment covers
-    @Column(nullable = false)
-    private Integer lessonsCount;
-
-    // NEW: Price per lesson
-    @Column(nullable = false)
-    private BigDecimal pricePerLesson;
+    private Integer remainingLessons = 0;
 
     @Column(nullable = false)
-    private LocalDateTime paymentDate;
+    private BigDecimal paidAmount = BigDecimal.ZERO;
 
-    private String description;
-
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus status;
+    private BigDecimal pricePerLesson = BigDecimal.ZERO;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    private LocalDateTime lastUpdated = LocalDateTime.now();
+
+    @PreUpdate
+    public void preUpdate() {
+        lastUpdated = LocalDateTime.now();
+    }
 }
